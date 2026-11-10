@@ -12,6 +12,11 @@ datasource db {
   provider = "postgresql"
 }
 
+enum TaskStatus {
+  PENDING
+  COMPLETED
+}
+
 model User{
   id Int @id @default(autoincrement())
   name String
@@ -24,4 +29,5 @@ model Task{
   title String
   userId Int
   user User @relation(fields: [userId],references: [id])
+  status TaskStatus @default(PENDING)
 }
