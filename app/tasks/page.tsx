@@ -72,9 +72,9 @@ const TaskPage = async ({ searchParams }: Props) => {
       <p>Status: {status}</p>
       <p>Priority: {priority}</p>
       <p>Search: {search}</p>
-      <Link href="/task">All</Link>
-      <Link href="/task?status=pending">Pending</Link>
-      <Link href="/task?status=completed">Completed</Link>
+      <Link href="/tasks">All</Link>
+      <Link href="/tasks?status=pending">Pending</Link>
+      <Link href="/tasks?status=completed">Completed</Link>
       <TaskList tasks={tasks} />
       <div>
         {currentPage > 1 && (
