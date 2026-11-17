@@ -13,7 +13,7 @@ export async function createTask(formData: FormData) {
   await prisma.task.create({
     data: {
       title: title,
-      userId: 1,
+      userId: "1",
     },
   });
 

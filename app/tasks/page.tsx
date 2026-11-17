@@ -4,6 +4,10 @@ import TaskList from "@/components/task-list";
 import prisma from "@/lib/prisma";
 import type { Prisma } from "@/generated/prisma/client";
 import CreateTask from "@/components/create-task";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
+import { Suspense } from "react";
+import { redirect } from "next/navigation";
 
 type Props = {
   searchParams: Promise<{
@@ -13,8 +17,30 @@ type Props = {
     page?: string;
   }>;
 };
-const TaskPage = async ({ searchParams }: Props) => {
+
+// Main page: provides the Suspense boundary
+const TaskPage = ({ searchParams }: Props) => {
+  return (
+    <Suspense fallback={<p>Loading tasks...</p>}>
+      <TaskPageContent searchParams={searchParams} />
+    </Suspense>
+  );
+};
+
+// Actual page logic
+const TaskPageContent = async ({ searchParams }: Props) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    redirect("/login");
+  }
+
+  console.log(session);
+
   const { status, priority, search, page } = await searchParams;
+
   const normalizedStatus =
     status === "pending"
       ? "PENDING"
@@ -38,9 +64,11 @@ const TaskPage = async ({ searchParams }: Props) => {
   };
 
   const skip = (currentPage - 1) * pageSize;
+
   const totalTasks = await prisma.task.count({
     where,
   });
+
   const totalPages = Math.max(1, Math.ceil(totalTasks / pageSize));
 
   const createPageUrl = (pageNumber: number) => {
@@ -69,13 +97,17 @@ const TaskPage = async ({ searchParams }: Props) => {
       <h1>Tasks Page</h1>
       <SearchBar />
       <CreateTask />
+
       <p>Status: {status}</p>
       <p>Priority: {priority}</p>
       <p>Search: {search}</p>
+
       <Link href="/tasks">All</Link>
       <Link href="/tasks?status=pending">Pending</Link>
       <Link href="/tasks?status=completed">Completed</Link>
+
       <TaskList tasks={tasks} />
+
       <div>
         {currentPage > 1 && (
           <Link href={createPageUrl(currentPage - 1)}>Previous</Link>
