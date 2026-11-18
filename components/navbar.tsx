@@ -9,7 +9,11 @@ const Navbar = () => {
   return (
     <header className="border-b border-border bg-background">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <Link href="/" className="text-xl font-bold text-foreground">
+        <Link
+          href="/"
+          prefetch={false}
+          className="text-xl font-bold text-foreground"
+        >
           Task<span className="text-primary">Flow</span>
         </Link>
 
@@ -17,13 +21,23 @@ const Navbar = () => {
           <Link
             href="/dashboard"
             className="text-sm text-muted transition hover:text-foreground"
+            prefetch={false}
           >
             Dashboard
           </Link>
 
           <Link
+            href="/"
+            className="text-sm text-muted transition hover:text-foreground"
+            prefetch={false}
+          >
+            Home
+          </Link>
+
+          <Link
             href="/projects"
             className="text-sm text-muted transition hover:text-foreground"
+            prefetch={false}
           >
             Projects
           </Link>

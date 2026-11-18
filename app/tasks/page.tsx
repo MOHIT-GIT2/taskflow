@@ -37,7 +37,7 @@ const TaskPageContent = async ({ searchParams }: Props) => {
     redirect("/login");
   }
 
-  console.log(session);
+  //console.log(session);
 
   const { status, priority, search, page } = await searchParams;
 
@@ -48,7 +48,7 @@ const TaskPageContent = async ({ searchParams }: Props) => {
         ? "COMPLETED"
         : undefined;
 
-  const currentPage = Math.max(0, Number(page) || 1);
+  const currentPage = Math.max(1, Number(page) || 1);
   const pageSize = 10;
 
   const where: Prisma.TaskWhereInput = {
@@ -81,7 +81,7 @@ const TaskPageContent = async ({ searchParams }: Props) => {
 
     params.set("page", String(pageNumber));
 
-    return `/task?${params.toString()}`;
+    return `/tasks?${params.toString()}`;
   };
 
   const tasks = await prisma.task.findMany({

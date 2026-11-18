@@ -32,7 +32,7 @@ export default function LoginPage() {
         setPassword("");
         setSuccess("");
 
-        router.push("/tasks");
+        router.push("/");
         router.refresh();
       }
 
@@ -42,7 +42,7 @@ export default function LoginPage() {
       }
 
       setSuccess("Login successful!");
-      console.log(result);
+      
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
