@@ -52,6 +52,7 @@ const TaskPageContent = async ({ searchParams }: Props) => {
   const pageSize = 10;
 
   const where: Prisma.TaskWhereInput = {
+    userId: session.user.id,
     ...(normalizedStatus ? { status: normalizedStatus } : {}),
     ...(search
       ? {
