@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { authClient } from "@/lib/client-auth";
+import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
   const [name, setName] = useState("");
@@ -11,6 +12,7 @@ export default function SignupPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   async function handleSignup(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -32,7 +34,11 @@ export default function SignupPage() {
       }
 
       setSuccess("Account created successfully!");
-      console.log(result);
+      if (!result.error) {
+        router.push("/");
+        router.refresh();
+      }
+      //console.log(result);
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
