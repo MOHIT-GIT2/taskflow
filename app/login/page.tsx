@@ -10,7 +10,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
 
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  //const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -18,7 +18,7 @@ export default function LoginPage() {
     event.preventDefault();
 
     setError("");
-    setSuccess("");
+    //setSuccess("");
     setLoading(true);
 
     try {
@@ -30,7 +30,7 @@ export default function LoginPage() {
       if (!result.error) {
         setEmail("");
         setPassword("");
-        setSuccess("");
+        //setSuccess("");
 
         router.push("/");
         router.refresh();
@@ -41,8 +41,7 @@ export default function LoginPage() {
         return;
       }
 
-      setSuccess("Login successful!");
-      
+      //setSuccess("Login successful!");
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
@@ -87,11 +86,11 @@ export default function LoginPage() {
             </p>
           )}
 
-          {success && (
+          {/* {success && (
             <p role="status" className="text-sm text-green-400">
               {success}
             </p>
-          )}
+          )} */}
 
           <button
             type="submit"
