@@ -5,10 +5,17 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { taskSchema } from "@/lib/validation/task";
 
-export async function createTask(formData: FormData) {
-  const title = formData.get("title") as string;
+export type CreateTaskState = {
+  error?: string;
+  success?: boolean;
+};
 
+export async function createTask(
+  prevState: CreateTaskState,
+  formData: FormData,
+): Promise<CreateTaskState> {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -17,18 +24,23 @@ export async function createTask(formData: FormData) {
     redirect("/login");
   }
 
-  if (!title.trim()) {
-    return;
+  const result = taskSchema.safeParse({
+    title: formData.get("title"),
+  });
+
+  if (!result.success) {
+    return { error: result.error.issues[0].message };
   }
 
   await prisma.task.create({
     data: {
-      title: title,
+      title: result.data.title,
       userId: session.user.id,
     },
   });
 
   revalidatePath("/tasks");
+  return { success: true };
 }
 
 export async function updateTask(formData: FormData) {
