@@ -118,7 +118,7 @@ app/
       [...all]/
         route.ts       # Better Auth HTTP handler
   login/               # Login route
-  register/            # Registration route
+  signup/               # Signup route
   tasks/
     [taskId]/          # Dynamic task route
     actions.ts         # Task Server Actions
