@@ -5,7 +5,10 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { taskSchema } from "@/lib/validation/task";
+import {
+  taskSchema,
+  updateTaskSchema,
+} from "@/lib/validation/task";
 
 export type CreateTaskState = {
   error?: string;
@@ -44,9 +47,6 @@ export async function createTask(
 }
 
 export async function updateTask(formData: FormData) {
-  const id = Number(formData.get("id"));
-  const title = formData.get("title") as string;
-
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -55,17 +55,22 @@ export async function updateTask(formData: FormData) {
     redirect("/login");
   }
 
-  if (!title.trim() || !id) {
+  const result = updateTaskSchema.safeParse({
+    id: formData.get("id"),
+    title: formData.get("title"),
+  });
+
+  if (!result.success) {
     return;
   }
 
   await prisma.task.updateMany({
     where: {
-      id: id,
+      id: result.data.id,
       userId: session.user.id,
     },
     data: {
-      title: title,
+      title: result.data.title,
     },
   });
 
